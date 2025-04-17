@@ -2,14 +2,15 @@ package com.example.demo_spring_boot_mysql.model;
 
 public class User {
     private Long id;
+    private String email;
     private String first_name;
     private String last_name;
-    private String email;
+    private String phone;
+    private String create_date;
+    private String status;
+    
     private String password;
     private String salt;
-    private String phone;
-    private String status;
-    private String create_date;
     private String last_login;
     private String create_by;
     private String updated_date;
