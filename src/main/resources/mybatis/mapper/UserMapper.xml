@@ -1,8 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo_spring_boot_mysql.mapper.UserMapper">
-    
-    <select id="findAll" resultType="com.example.demo_spring_boot_mysql.model.User">
+    <resultMap id="UserResult" type="com.example.demo_spring_boot_mysql.model.User">
+        <id property="id" column="id"/>
+        <result property="email" column="email"/>
+        <result property="first_name" column="first_name"/>
+        <result property="last_name" column="last_name"/>
+        <result property="phone" column="phone"/>
+        <result property="create_date" column="create_date"/>
+        <result property="status" column="status"/>
+
+        <result property="password" column="password"/>
+        <result property="salt" column="salt"/>
+        <result property="last_login" column="last_login"/>
+        <result property="create_by" column="create_by"/>
+        <result property="updated_date" column="updated_date"/>
+        <result property="updated_by" column="updated_by"/>
+
+    </resultMap>
+<!--    <select id="findAll" resultType="com.example.demo_spring_boot_mysql.model.User">-->
+<!--        SELECT * FROM user-->
+<!--    </select>-->
+    <select id="findAll" resultMap="UserResult">
         SELECT * FROM user
     </select>
     <select id="findById"  parameterType="long" resultType="com.example.demo_spring_boot_mysql.model.User">
