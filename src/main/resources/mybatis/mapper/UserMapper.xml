@@ -27,6 +27,9 @@
     <select id="findById"  parameterType="long" resultType="com.example.demo_spring_boot_mysql.model.User">
         SELECT * FROM user WHERE id = #{id}
     </select>
+    <select id="findByEmail"  parameterType="string" resultType="com.example.demo_spring_boot_mysql.model.User">
+        SELECT * FROM user WHERE email = #{email}
+    </select>
     <insert id="insert" parameterType="com.example.demo_spring_boot_mysql.model.User" >
         INSERT INTO user(first_name, last_name, email, password, salt,status,create_date,last_login,create_by,updated_date,updated_by)
         VALUES(#{first_name}, #{last_name}, #{email}, #{password}, #{salt}, #{status}, #{create_date}, #{last_login}, #{create_by}, #{updated_date}, #{updated_by})
