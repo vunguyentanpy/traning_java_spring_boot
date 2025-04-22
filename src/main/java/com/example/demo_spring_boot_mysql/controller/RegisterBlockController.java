@@ -1,4 +1,5 @@
 package com.example.demo_spring_boot_mysql.controller;
+import com.example.demo_spring_boot_mysql.model.Customer;
 import com.example.demo_spring_boot_mysql.model.RegisterBlock;
 import com.example.demo_spring_boot_mysql.service.RegisterBlockService;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +14,11 @@ public class RegisterBlockController {
     public RegisterBlockController(RegisterBlockService registerBlockService) {
         this.registerBlockService = registerBlockService;
     }
-
-    @GetMapping
+//    @GetMapping
+//    public List<RegisterBlock> findAll() {
+//        return registerBlockService.findAll();
+//    }
+    @GetMapping("/findAll")
     public List<RegisterBlock> findAll() {
         System.out.println("findAll: ");
         return registerBlockService.findAll();
