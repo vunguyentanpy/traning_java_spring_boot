@@ -76,10 +76,9 @@ public class UserService extends DB implements UserDetailsService {
             throw new UsernameNotFoundException("User not found with email: " + email);
         }
 
-        // Build the UserDetails object
         UserBuilder builder = org.springframework.security.core.userdetails.User.withUsername(email);
         builder.password(user.getPassword());
-        builder.authorities(new ArrayList<>()); // Add roles or authorities if any
+        builder.authorities(new ArrayList<>());
 
         return builder.build();
     }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo_spring_boot_mysql.mapper.RegisterBlockMapper">
+    <resultMap id="RegisterBlockResult" type="com.example.demo_spring_boot_mysql.model.RegisterBlock">
+        <id property="id" column="id"/>
+        <result property="id_template" column="id_template"/>
+        <result property="addr" column="addr"/>
+        <result property="count" column="count"/>
+        
+    </resultMap>
+    <select id="findAll" resultMap="RegisterBlockResult">
+        SELECT * FROM register_block
+    </select>
+    <select id="findById"  parameterType="long" resultType="com.example.demo_spring_boot_mysql.model.RegisterBlock">
+        SELECT * FROM register_block WHERE id = #{id}
+    </select>
+    <insert id="insert" parameterType="com.example.demo_spring_boot_mysql.model.RegisterBlock" >
+        INSERT INTO register_block(id_template, addr, count)
+        VALUES(#{id_template},#{addr},#{count})
+    </insert>
+    <update id="update" parameterType="com.example.demo_spring_boot_mysql.model.RegisterBlock">
+        UPDATE register_block
+        SET id_template = #{id_template},addr = #{addr},count = #{count}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM register_block WHERE id = #{id}
+    </delete>
+</mapper>

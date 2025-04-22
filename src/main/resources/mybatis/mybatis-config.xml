@@ -46,6 +46,8 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-co
     <mappers>
         <mapper resource="mybatis/mapper/UserMapper.xml"/>
         <mapper resource="mybatis/mapper/CustomerMapper.xml"/>
+		<mapper resource="mybatis/mapper/DeviceListMapper.xml"/>
+		<mapper resource="mybatis/mapper/RegisterBlockMapper.xml"/>
         <!-- <mapper resource="com/example/mapper/OrderMapper.xml"/> -->
     </mappers>
 </configuration>

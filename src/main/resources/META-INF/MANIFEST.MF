@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: com.example.demo_spring_boot_mysql.DemoSpringBootMysqlApplic
+ ation
+

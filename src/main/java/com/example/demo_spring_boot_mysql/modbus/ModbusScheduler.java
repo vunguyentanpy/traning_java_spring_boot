@@ -9,8 +9,8 @@ public class ModbusScheduler {
     public static void main(String[] args) throws SchedulerException {
         SchedulerFactory schedulerFactory = new StdSchedulerFactory();
         Scheduler scheduler = schedulerFactory.getScheduler();
-
-        int numberOfDevices = 100;
+        scheduler.getContext().put("org.quartz.threadPool.threadCount", 20);
+        int numberOfDevices = 5;
 
         for (int i = 0; i < numberOfDevices; i++) {
             String ipAddress = "192.168.80." + (100 + i);
@@ -28,7 +28,7 @@ public class ModbusScheduler {
                     .withIdentity("deviceTrigger" + i, "group1")
                     .startNow()
                     .withSchedule(SimpleScheduleBuilder.simpleSchedule()
-                            .withIntervalInSeconds(60)
+                            .withIntervalInSeconds(2)
                             .repeatForever())
                     .build();
 
