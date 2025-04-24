@@ -1,5 +1,6 @@
 package com.example.demo_spring_boot_mysql.service;
 import com.example.demo_spring_boot_mysql.mapper.UserMapper;
+import com.example.demo_spring_boot_mysql.util.Constants;
 import com.example.demo_spring_boot_mysql.model.User;
 import com.example.demo_spring_boot_mysql.util.DB;
 import org.apache.ibatis.session.SqlSession;
@@ -11,63 +12,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.User.UserBuilder;
 
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import java.util.Base64;
 import java.util.ArrayList;
 import com.example.demo_spring_boot_mysql.util.JwtUtil;
+
 @Service
 public class UserService extends DB implements UserDetailsService {
     @Autowired
     private JwtUtil jwtUtil;
-
-    public class PasswordEncryptionUtil {
-
-        private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
-        private static final String KEY = "0123456789abcdef";
-        private static final String INIT_VECTOR = "abcdef9876543210";
-
-
-        public static String encrypt(String password) throws Exception {
-            try {
-                SecretKey secretKey = new SecretKeySpec(KEY.getBytes(), "AES");
-                IvParameterSpec ivParameterSpec = new IvParameterSpec(INIT_VECTOR.getBytes());
-
-                Cipher cipher = Cipher.getInstance(ALGORITHM);
-                cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParameterSpec);
-
-                byte[] encrypted = cipher.doFinal(password.getBytes());
-                return Base64.getEncoder().encodeToString(encrypted);
-
-
-            } catch (Exception ex) {
-                return null;
-            }
-
-        }
-
-        public static String decrypt(String message) throws Exception {
-            try {
-                SecretKey secretKey = new SecretKeySpec(KEY.getBytes(), "AES");
-                IvParameterSpec ivParameterSpec = new IvParameterSpec(INIT_VECTOR.getBytes());
-
-                Cipher cipher = Cipher.getInstance(ALGORITHM);
-                cipher.init(Cipher.DECRYPT_MODE, secretKey, ivParameterSpec);
-
-                byte[] decodedBytes = Base64.getDecoder().decode(message);
-                byte[] decrypted = cipher.doFinal(decodedBytes);
-
-                return new String(decrypted);
-            } catch (Exception ex) {
-
-                return null;
-
-            }
-        }
-
-    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -83,18 +34,7 @@ public class UserService extends DB implements UserDetailsService {
         return builder.build();
     }
 
-    public boolean authenticate(String email, String password) throws Exception {
 
-        User user = findByEmail(email);
-
-        if (user != null) {
-            String encryptedPassword = PasswordEncryptionUtil.encrypt(password);
-            String password_encrypt = PasswordEncryptionUtil.decrypt(encryptedPassword);
-            System.out.println("encryptedPassword: " + password_encrypt);
-            return encryptedPassword.equals(user.getPassword());
-        }
-        return false;
-    }
     public User findByEmail(String email) {
         try (SqlSession session = getSession()) {
             UserMapper mapper = session.getMapper(UserMapper.class);
@@ -117,7 +57,9 @@ public class UserService extends DB implements UserDetailsService {
     public void insert(User user) {
         try (SqlSession session = getSession()) {
             try {
-                String encryptedPassword = PasswordEncryptionUtil.encrypt(user.getPassword());
+                System.out.println("user.getPassword(): " + user.getPassword());
+                String encryptedPassword = jwtUtil.encrypt(user.getPassword());
+                System.out.println("encryptedPassword: " + encryptedPassword);
                 user.setPassword(encryptedPassword);
             } catch (Exception e) {
                 throw new RuntimeException("Failed to encrypt password", e);
@@ -157,6 +99,10 @@ public class UserService extends DB implements UserDetailsService {
         try  {
             session = getSession();
             UserMapper mapper = session.getMapper(UserMapper.class);
+            User user = mapper.findById(id);
+            if (user == null) {
+                throw new RuntimeException("User not found with id: " + id);
+            }
             mapper.delete(id);
             session.commit();
 
@@ -172,9 +118,18 @@ public class UserService extends DB implements UserDetailsService {
                 session.close();
             }
         }
-
-
     }
+    public boolean authenticate(String email, String password) throws Exception {
 
+        User user = findByEmail(email);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found with email: " + email);
+        }
+        String encryptedPassword = jwtUtil.encrypt(password);
+        if (!encryptedPassword.equals(user.getPassword())) {
+            throw new IllegalArgumentException("Invalid credentials");
+        }
+        return true;
+    }
 
 }

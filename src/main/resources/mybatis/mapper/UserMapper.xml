@@ -18,11 +18,9 @@
         <result property="updated_by" column="updated_by"/>
 
     </resultMap>
-<!--    <select id="findAll" resultType="com.example.demo_spring_boot_mysql.model.User">-->
-<!--        SELECT * FROM user-->
-<!--    </select>-->
-    <select id="findAll" resultMap="UserResult">
-        SELECT * FROM user
+    <select id="findAll" resultType="com.example.demo_spring_boot_mysql.model.User">
+        SELECT * FROM user;
+
     </select>
     <select id="findById"  parameterType="long" resultType="com.example.demo_spring_boot_mysql.model.User">
         SELECT * FROM user WHERE id = #{id}

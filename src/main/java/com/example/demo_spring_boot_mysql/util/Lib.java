@@ -1,57 +1,71 @@
 package com.example.demo_spring_boot_mysql.util;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
 public class Lib {
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         public static class JsonResponse {
             private boolean success;
             private String message;
             private Object data;
-            private String token;
+            private String accessToken;
+            private String refreshToken;
 
-        public JsonResponse(boolean success, String message, Object data) {
+            public JsonResponse(boolean success, String message, Object data) {
             this.success = success;
             this.message = message;
             this.data = data;
-            this.token = null;
+            this.accessToken = null;
+            this.refreshToken= null;
         }
 
-        public JsonResponse(boolean success, String message, Object data, String token) {
+        public JsonResponse(boolean success, String message, Object data, String accessToken, String refreshToken) {
             this.success = success;
             this.message = message;
             this.data = data;
-            this.token = token;
+            this.accessToken = accessToken;
+            this.refreshToken = refreshToken;
         }
+            public boolean isSuccess() {
+                return success;
+            }
 
-        // Getters and setters
-        public boolean isSuccess() {
-            return success;
-        }
+            public void setSuccess(boolean success) {
+                this.success = success;
+            }
 
-        public void setSuccess(boolean success) {
-            this.success = success;
-        }
+            public String getMessage() {
+                return message;
+            }
 
-        public String getMessage() {
-            return message;
-        }
+            public void setMessage(String message) {
+                this.message = message;
+            }
 
-        public void setMessage(String message) {
-            this.message = message;
-        }
+            public Object getData() {
+                return data;
+            }
 
-        public Object getData() {
-            return data;
-        }
+            public void setData(Object data) {
+                this.data = data;
+            }
 
-        public void setData(Object data) {
-            this.data = data;
-        }
-        public String getToken() {
-            return token;
-        }
+            public String getAccessToken() {
+                return accessToken;
+            }
 
-        public void setToken(String token) {
-            this.token = token;
-        }
+            public void setAccessToken(String accessToken) {
+                this.accessToken = accessToken;
+            }
+
+            public String getRefreshToken() {
+                return refreshToken;
+            }
+
+            public void setRefreshToken(String refreshToken) {
+                this.refreshToken = refreshToken;
+            }
+
+
+
         }
         //      modbus
         private int byteSwap(int register) {

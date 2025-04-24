@@ -2,15 +2,19 @@ package com.example.demo_spring_boot_mysql.controller;
 
 import com.example.demo_spring_boot_mysql.model.User;
 import com.example.demo_spring_boot_mysql.service.UserService;
+import com.example.demo_spring_boot_mysql.exception.GlobalExceptionHandler;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import com.example.demo_spring_boot_mysql.util.Lib.JsonResponse;
 import com.example.demo_spring_boot_mysql.util.JwtUtil;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     @Autowired
-    private final JwtUtil jwtUtil;
+    private final  JwtUtil jwtUtil;
     private final UserService userService;
     @Autowired
     public UserController(UserService userService, JwtUtil jwtUtil) {
@@ -30,25 +34,45 @@ public class UserController {
         this.jwtUtil = jwtUtil;
     }
 
-    @GetMapping
-    public List<User> findAll() {
-        return userService.findAll();
+    @GetMapping("/all")
+    public ResponseEntity<Object> findAll() {
+        try {
+            List<User> users = userService.findAll();
+            return ResponseEntity.ok(new GlobalExceptionHandler.JsonResponse(true,
+                    "Get all ok", users));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new GlobalExceptionHandler.JsonResponse(false,
+                            "Get all failed: " + e.getMessage(), null));
+        }
+
     }
    @GetMapping("/{id}")
-   public User findById(@PathVariable Long id) {
-       return userService.findById(id);
+   public ResponseEntity<Object> findById(@PathVariable Long id) {
+       try {
+           User  user = userService.findById(id);
+           return ResponseEntity.ok(new GlobalExceptionHandler.JsonResponse(true,
+                   "findById ok", user));
+       } catch (Exception e) {
+           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                   .body(new GlobalExceptionHandler.JsonResponse(false,
+                           "findById failed: " + e.getMessage(), null));
+       }
    }
 
-   @PostMapping
+   @PostMapping("/insert")
    public ResponseEntity<Object> insert(@Valid @RequestBody User user, BindingResult result) {
        if (result.hasErrors()) {
            return ResponseEntity.badRequest().body(result.getAllErrors());
        }
        try {
            userService.insert(user);
-           return ResponseEntity.ok(new JsonResponse(true, "Insert ok", user));
+           return ResponseEntity.ok(new GlobalExceptionHandler.JsonResponse(true,
+                   "Insert ok", user));
        } catch (Exception e) {
-           return ResponseEntity.status(500).body(new JsonResponse(false, "Insert failed: " + e.getMessage(), null));
+           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                   .body(new GlobalExceptionHandler.JsonResponse(false,
+                           "Insert failed: " + e.getMessage(), null));
        }
    }
 
@@ -56,35 +80,56 @@ public class UserController {
     public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody User user) {
         try {
             userService.update(id, user);
-            return ResponseEntity.ok(new JsonResponse(true, "Update ok", user));
+            return ResponseEntity.ok(new GlobalExceptionHandler.JsonResponse(true,
+                    "Update ok", user));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(new JsonResponse(false, "Update failed: " + e.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new GlobalExceptionHandler.JsonResponse(false,
+                            "Update failed: " + e.getMessage(), null));
+        }
+    }
+    @PostMapping("/refresh-token")
+    public ResponseEntity<Object> refreshToken(@RequestBody JwtUtil.RefreshTokenRequest request) {
+        try {
+            System.out.println("refreshToken " + request.getRefreshToken());
+            String newAccessToken = jwtUtil.refreshAccessToken(request.getRefreshToken());
+            Map<String, Object> responseData = new HashMap<>();
+            responseData.put("accessToken", newAccessToken);
+
+            return ResponseEntity.ok(new GlobalExceptionHandler.JsonResponse(true,
+                    "Token refreshed successfully", responseData));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new GlobalExceptionHandler.JsonResponse(false,
+                            "Refresh token failed: " + e.getMessage(), null));
         }
     }
    @DeleteMapping("/{id}")
    public ResponseEntity<Object> delete(@PathVariable Long id) {
-       try {
-           userService.delete(id);
-           return ResponseEntity.ok(new JsonResponse(true, "Delete ok", id));
-       } catch (Exception e) {
-           return ResponseEntity.status(500).body(new JsonResponse(false, "Delete failed: " + e.getMessage(), null));
-       }
+       userService.delete(id);
+       return ResponseEntity.ok(new GlobalExceptionHandler.JsonResponse(true, "Delete ok", id));
    }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody User user) {
+    public ResponseEntity<Object> login(@RequestBody User user)  {
         try {
-            System.out.println("email: " + user.getEmail());
             boolean isAuthenticated = userService.authenticate(user.getEmail(), user.getPassword());
             if (isAuthenticated) {
-                String token=null;
-                token = jwtUtil.generateToken(user.getEmail());
-                return ResponseEntity.ok(new JsonResponse(true, "Login successful", null,token));
+                String accessToken = jwtUtil.generateAccessToken(user.getEmail());
+                String refreshToken = jwtUtil.generateRefreshToken(user.getEmail());
+                Map<String, Object> responseData = new HashMap<>();
+                responseData.put("accessToken", accessToken);
+                responseData.put("refreshToken", refreshToken);
+
+                return ResponseEntity.ok(new GlobalExceptionHandler.JsonResponse(true,
+                        "Login successful", responseData));
             } else {
-                return ResponseEntity.status(401).body(new JsonResponse(false, "Invalid credentials", null));
+                throw new IllegalArgumentException("Invalid credentials");
             }
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(new JsonResponse(false, "Login failed: " + e.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new GlobalExceptionHandler.JsonResponse(false,
+                            "Login failed: " + e.getMessage(), null));
         }
     }
 

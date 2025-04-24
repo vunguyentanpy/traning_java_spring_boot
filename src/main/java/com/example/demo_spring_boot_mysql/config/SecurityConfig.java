@@ -48,10 +48,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/api/user/login").permitAll()
                 .requestMatchers("/api/device/**").authenticated()
-                .requestMatchers("/api/customer/**").permitAll()
-                .requestMatchers("/api/registerBlock/**").permitAll()
+                .requestMatchers("/api/customer/**").authenticated()
+                .requestMatchers("/api/registerBlock/**").authenticated()
 //                .requestMatchers("/api/customer/**").authenticated()
-//                .anyRequest().authenticated()
+                .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
