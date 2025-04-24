@@ -1,4 +1,28 @@
 Manifest-Version: 1.0
 Main-Class: com.example.demo_spring_boot_mysql.DemoSpringBootMysqlApplic
  ation
+Class-Path: spring-boot-starter-tomcat-3.4.4.jar native-lib-loader-2.5.0
+ .jar mchange-commons-java-0.2.15.jar spring-context-6.2.5.jar mysql-con
+ nector-j-8.0.33.jar jakarta.annotation-api-2.1.1.jar spring-core-6.2.5.
+ jar jackson-annotations-2.18.3.jar jackson-module-parameter-names-2.18.
+ 3.jar tomcat-embed-core-10.1.39.jar spring-boot-starter-3.4.4.jar quart
+ z-2.3.2.jar jakarta.validation-api-3.0.2.jar spring-security-core-6.4.4
+ .jar spring-boot-autoconfigure-3.4.4.jar slf4j-api-2.0.17.jar log4j-slf
+ 4j2-impl-2.24.3.jar jna-4.2.2.jar classmate-1.7.0.jar spring-webmvc-6.2
+ .5.jar log4j-jul-2.24.3.jar androidthings-1.0.jar jboss-logging-3.6.1.F
+ inal.jar spring-expression-6.2.5.jar rxtx-2.1.7.jar jackson-datatype-jd
+ k8-2.18.3.jar jackson-datatype-jsr310-2.18.3.jar spring-security-web-6.
+ 4.4.jar purejavacomm-1.0.2.RELEASE.jar jSerialComm-2.0.2.jar jssc-2.9.6
+ .jar jackson-core-2.18.3.jar jjwt-jackson-0.11.5.jar micrometer-commons
+ -1.14.5.jar jackson-databind-2.18.3.jar spring-web-6.2.5.jar tomcat-emb
+ ed-websocket-10.1.39.jar spring-jcl-6.2.5.jar jjwt-impl-0.11.5.jar spri
+ ng-security-config-6.4.4.jar mapstruct-1.5.3.Final.jar spring-boot-star
+ ter-security-2.7.0.jar spring-boot-starter-log4j2-3.4.4.jar spring-aop-
+ 6.2.5.jar spring-security-crypto-6.4.4.jar log4j-api-2.24.3.jar log4j-c
+ ore-2.24.3.jar spring-boot-3.4.4.jar j2mod-2.5.0.jar org.eclipse.paho.c
+ lient.mqttv3-1.2.5.jar spring-beans-6.2.5.jar micrometer-observation-1.
+ 14.5.jar jjwt-api-0.11.5.jar jlibmodbus-1.2.9.11.jar spring-boot-starte
+ r-json-3.4.4.jar snakeyaml-2.3.jar mybatis-3.5.0.jar tomcat-embed-el-10
+ .1.39.jar hibernate-validator-7.0.1.Final.jar spring-boot-starter-web-3
+ .4.4.jar
 
