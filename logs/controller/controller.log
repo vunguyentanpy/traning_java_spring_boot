@@ -1,0 +1,17 @@
+2025-04-24 16:23:42,473 [INFO] com.example.demo_spring_boot_mysql.controller.UserController - Controller log example using Lombok Log4j2
+2025-04-24 16:24:03,501 [INFO] com.example.demo_spring_boot_mysql.controller.UserController - Controller log example using Lombok Log4j2
+2025-04-24 16:24:20,712 [INFO] com.example.demo_spring_boot_mysql.controller.UserController - Controller log example using Lombok Log4j2
+2025-04-24 16:35:42,809 [INFO] com.example.demo_spring_boot_mysql.controller.UserController - org.apache.ibatis.exceptions.PersistenceException: 
+### Error updating database.  Cause: java.sql.SQLIntegrityConstraintViolationException: Duplicate entry 'vu3@gmail.com' for key 'user.email'
+### The error may exist in mybatis/mapper/UserMapper.xml
+### The error may involve com.example.demo_spring_boot_mysql.mapper.UserMapper.insert-Inline
+### The error occurred while setting parameters
+### SQL: INSERT INTO user(first_name, last_name, email, password, salt,status,create_date,last_login,create_by,updated_date,updated_by)         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+### Cause: java.sql.SQLIntegrityConstraintViolationException: Duplicate entry 'vu3@gmail.com' for key 'user.email'
+2025-04-24 16:36:16,771 [INFO] com.example.demo_spring_boot_mysql.controller.UserController - org.apache.ibatis.exceptions.PersistenceException: 
+### Error updating database.  Cause: java.sql.SQLIntegrityConstraintViolationException: Duplicate entry 'vu3@gmail.com' for key 'user.email'
+### The error may exist in mybatis/mapper/UserMapper.xml
+### The error may involve com.example.demo_spring_boot_mysql.mapper.UserMapper.insert-Inline
+### The error occurred while setting parameters
+### SQL: INSERT INTO user(first_name, last_name, email, password, salt,status,create_date,last_login,create_by,updated_date,updated_by)         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+### Cause: java.sql.SQLIntegrityConstraintViolationException: Duplicate entry 'vu3@gmail.com' for key 'user.email'

@@ -1,6 +1,7 @@
 package com.example.demo_spring_boot_mysql.controller;
 
 import com.example.demo_spring_boot_mysql.model.User;
+import com.example.demo_spring_boot_mysql.dto.respose.UserResponseDTO;
 import com.example.demo_spring_boot_mysql.service.UserService;
 import com.example.demo_spring_boot_mysql.exception.GlobalExceptionHandler;
 import jakarta.validation.Valid;
@@ -15,13 +16,15 @@ import com.example.demo_spring_boot_mysql.util.JwtUtil;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
+import lombok.extern.log4j.Log4j2;
 @RestController
+@Log4j2
 @RequestMapping("/api/user")
 public class UserController {
 
@@ -38,9 +41,18 @@ public class UserController {
     public ResponseEntity<Object> findAll() {
         try {
             List<User> users = userService.findAll();
+            if (users.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                        .body(new GlobalExceptionHandler.JsonResponse(false, "No users found", null));
+            }
+            List<UserResponseDTO> data = users.stream()
+                    .map(UserResponseDTO::new)
+                    .collect(Collectors.toList());
+
             return ResponseEntity.ok(new GlobalExceptionHandler.JsonResponse(true,
-                    "Get all ok", users));
+                    "Get all ok", data));
         } catch (Exception e) {
+            log.info(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new GlobalExceptionHandler.JsonResponse(false,
                             "Get all failed: " + e.getMessage(), null));
@@ -54,6 +66,7 @@ public class UserController {
            return ResponseEntity.ok(new GlobalExceptionHandler.JsonResponse(true,
                    "findById ok", user));
        } catch (Exception e) {
+           log.info(e);
            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                    .body(new GlobalExceptionHandler.JsonResponse(false,
                            "findById failed: " + e.getMessage(), null));
@@ -70,6 +83,7 @@ public class UserController {
            return ResponseEntity.ok(new GlobalExceptionHandler.JsonResponse(true,
                    "Insert ok", user));
        } catch (Exception e) {
+           log.info(e);
            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                    .body(new GlobalExceptionHandler.JsonResponse(false,
                            "Insert failed: " + e.getMessage(), null));
@@ -83,6 +97,7 @@ public class UserController {
             return ResponseEntity.ok(new GlobalExceptionHandler.JsonResponse(true,
                     "Update ok", user));
         } catch (Exception e) {
+            log.info(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new GlobalExceptionHandler.JsonResponse(false,
                             "Update failed: " + e.getMessage(), null));
@@ -99,6 +114,7 @@ public class UserController {
             return ResponseEntity.ok(new GlobalExceptionHandler.JsonResponse(true,
                     "Token refreshed successfully", responseData));
         } catch (Exception e) {
+            log.info(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new GlobalExceptionHandler.JsonResponse(false,
                             "Refresh token failed: " + e.getMessage(), null));
@@ -114,6 +130,7 @@ public class UserController {
     public ResponseEntity<Object> login(@RequestBody User user)  {
         try {
             boolean isAuthenticated = userService.authenticate(user.getEmail(), user.getPassword());
+
             if (isAuthenticated) {
                 String accessToken = jwtUtil.generateAccessToken(user.getEmail());
                 String refreshToken = jwtUtil.generateRefreshToken(user.getEmail());
@@ -127,6 +144,7 @@ public class UserController {
                 throw new IllegalArgumentException("Invalid credentials");
             }
         } catch (Exception e) {
+            log.info(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new GlobalExceptionHandler.JsonResponse(false,
                             "Login failed: " + e.getMessage(), null));

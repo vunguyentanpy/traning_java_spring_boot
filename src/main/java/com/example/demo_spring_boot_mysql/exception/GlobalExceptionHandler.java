@@ -31,15 +31,13 @@ public class GlobalExceptionHandler {
         private boolean success;
         private String message;
         private Object data;
-//        private String accessToken;
-//        private String refreshToken;
+
 
         public JsonResponse(boolean success, String message, Object data) {
             this.success = success;
             this.message = message;
             this.data = data;
-//            this.accessToken = accessToken;
-//            this.refreshToken = refreshToken;
+
         }
 
         public boolean isSuccess() {
@@ -65,21 +63,7 @@ public class GlobalExceptionHandler {
         public void setData(Object data) {
             this.data = data;
         }
-//        public String getAccessToken() {
-//            return accessToken;
-//        }
-//
-//        public void setAccessToken(String accessToken) {
-//            this.accessToken = accessToken;
-//        }
-//
-//        public String getRefreshToken() {
-//            return refreshToken;
-//        }
-//
-//        public void setRefreshToken(String refreshToken) {
-//            this.refreshToken = refreshToken;
-//        }
+
     }
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public class ResponseData {

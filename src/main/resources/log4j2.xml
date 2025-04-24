@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <RollingFile name="ControllerAppender"
+                     fileName="logs/controller/controller.log"
+                     filePattern="logs/controller/controller-%d{yyyy-MM-dd}.log.gz">
+            <PatternLayout pattern="%d [%p] %c - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="ServiceAppender"
+                     fileName="logs/service/service.log"
+                     filePattern="logs/service/service-%d{yyyy-MM-dd}.log.gz">
+            <PatternLayout pattern="%d [%p] %c - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="UntilAppender"
+                     fileName="logs/until/until.log"
+                     filePattern="logs/until/until-%d{yyyy-MM-dd}.log.gz">
+            <PatternLayout pattern="%d [%p] %c - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+        </RollingFile>
+
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d [%p] %c - %m%n"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="com.example.demo_spring_boot_mysql.controller" level="info" additivity="false">
+            <AppenderRef ref="ControllerAppender"/>
+            <AppenderRef ref="ConsoleAppender"/>
+        </Logger>
+
+        <Logger name="com.example.demo.service" level="info" additivity="false">
+            <AppenderRef ref="ServiceAppender"/>
+            <AppenderRef ref="ConsoleAppender"/>
+        </Logger>
+
+        <Logger name="com.example.demo.until" level="info" additivity="false">
+            <AppenderRef ref="UntilAppender"/>
+            <AppenderRef ref="ConsoleAppender"/>
+        </Logger>
+
+        <Root level="error">
+            <AppenderRef ref="ConsoleAppender"/>
+        </Root>
+    </Loggers>
+</Configuration>
